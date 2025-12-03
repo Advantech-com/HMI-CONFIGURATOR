@@ -1,0 +1,21 @@
+{
+  "name": "HMI Configurator",
+  "short_name": "HMI Tool",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1E293B",
+  "theme_color": "#0F172A",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "minilogo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "minilogo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
