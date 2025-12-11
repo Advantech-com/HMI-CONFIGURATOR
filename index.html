@@ -6,13 +6,12 @@
   <title>HMI CONFIGURATOR</title>
   
   <link rel="manifest" href="manifest.json"> 
-
+ 
   <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+ 
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="minilogo.png">
     
   <style>
@@ -30,17 +29,9 @@
       --sticky-bg: #FFFFFF;
       --header-bg: #F8FAFC;
       --success: #10B981;
-
-      /* Chat Light */
-      --chat-bg: #ffffff;
-      --chat-header-bg: #eff6ff;
-      --chat-header-text: #1e3a8a;
-      --chat-user-grad: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-      --chat-bot-bg: #f1f5f9;
-      --chat-bot-text: #334155;
-      --chat-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+      --empty-cell: #CBD5E1;
     }
-
+ 
     [data-theme="dark"] {
       /* --- DARK THEME --- */
       --bg-body: #0F172A;
@@ -53,18 +44,10 @@
       --hover-row: #2A3650;
       --sticky-bg: #1E293B;
       --header-bg: #1E293B;
-
-      /* Chat Dark */
-      --chat-bg: #1e293b;
-      --chat-header-bg: #0f172a;
-      --chat-header-text: #ffffff;
-      --chat-user-grad: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-      --chat-bot-bg: #334155;
-      --chat-bot-text: #f1f5f9;
-      --chat-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      --empty-cell: #475569;
     }
-
-    /* --- GLOBAL STYLE (SCALED DOWN ~10%) --- */
+ 
+    /* --- GLOBAL STYLE --- */
     body { 
       font-family: 'Inter', sans-serif; 
       background-color: var(--bg-body); 
@@ -86,8 +69,8 @@
         margin: 0 auto;
         box-sizing: border-box;
     }
-
-    /* --- HEADER (Horizontal Professional Layout) --- */
+ 
+    /* --- HEADER --- */
     .header { 
         display: flex; 
         justify-content: space-between; 
@@ -106,7 +89,7 @@
     .mya-logo { height: 29px; width: auto; display: block; } 
     .advantech-logo { height: 30px; width: auto; display: block; }
     .logo-divider { width: 1px; height: 20px; background: var(--border); }
-
+ 
     .header-center { 
         position: absolute;
         left: 50%;
@@ -129,9 +112,9 @@
     }
     .app-title:hover { transform: scale(1.02); }
     @keyframes shine { to { background-position: 200% center; } }
-
+ 
     .header-right { flex: 0 0 auto; display: flex; justify-content: flex-end; align-items: center; gap: 12px; position: relative; }
-
+ 
     .theme-toggle {
         background: var(--bg-body); border: 2px solid var(--border); color: var(--text-muted);
         width: 34px; height: 34px; 
@@ -140,7 +123,7 @@
         transition: all 0.2s ease; flex-shrink: 0;
     }
     .theme-toggle:hover { border-color: var(--primary); color: var(--primary); background: var(--hover-row); transform: translateY(-2px); }
-
+ 
     .search-wrapper { position: relative; width: 250px; } 
     .search-input { 
       background: var(--bg-body); border: 2px solid var(--border); color: var(--text-main);
@@ -148,14 +131,14 @@
       font-family: 'Inter', sans-serif; transition: 0.2s; box-sizing: border-box; font-size: 13px; height: 34px; 
     }
     .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3); }
-
+ 
     .text-metallic-blue {
         background: linear-gradient(to bottom, #60a5fa, #2563eb, #1d4ed8);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 800; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;
     }
-
+ 
     #search-suggestions-box {
         display: none; position: absolute; top: 100%; left: 0; width: 100%;
         background: var(--bg-card); border: 2px solid var(--border);
@@ -165,14 +148,14 @@
     .suggestion-item { padding: 10px 16px; cursor: pointer; color: var(--text-muted); font-size: 13px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .suggestion-item:hover { background: var(--hover-row); }
     .suggestion-item strong { color: var(--text-main); font-size: 14px; }
-
+ 
     .btn-help { 
       background: transparent; border: 2px solid var(--border); color: var(--text-muted);
       padding: 0 16px; border-radius: 7px; cursor: pointer; font-weight: 700; font-size: 12px;
       transition: 0.2s; height: 34px; display: flex; align-items: center; flex-shrink: 0; 
     }
     .btn-help:hover { border-color: var(--primary); color: var(--primary); }
-
+ 
     #help-banner {
         display: none; position: absolute; top: 55px; right: 0; width: 290px;
         background: var(--bg-card); border: 2px solid var(--border); padding: 22px;
@@ -181,7 +164,7 @@
     #help-banner h3 { margin: 0 0 12px 0; color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 8px; font-size: 15px; }
     #help-banner ul { padding-left: 18px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px; font-size: 13px; }
     .contact-link { display: block; text-align: center; background: var(--primary); color: white; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; }
-
+ 
     /* LANDING PAGE */
     #landing-page {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -209,7 +192,7 @@
       
     #main-app-container { display: none; animation: slideUp 0.5s ease-out; width: 100%; }
     @keyframes slideUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
-
+ 
     /* CONTROLS */
     .controls { background: var(--bg-card); padding: 22px; border-radius: 14px; border: 2px solid var(--border); margin-bottom: 22px; position: relative; z-index: 500; }
     .controls-header { display: flex; justify-content: space-between; margin-bottom: 18px; align-items: center; flex-wrap: wrap; gap: 14px; }
@@ -221,12 +204,12 @@
         padding: 9px 14px; border-radius: 8px; font-family: 'Inter', sans-serif; 
         outline: none; cursor: pointer; font-size: 13px; font-weight: 600; min-width: 140px;
     }
-
+ 
     .btn-apply { background: var(--primary); color: white; border: none; padding: 9px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 800; transition: 0.2s; }
     .btn-apply:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3); }
     .btn-reset { background: var(--border); color: var(--text-main); border: none; padding: 9px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 700; transition: 0.2s; }
     .btn-reset:hover { background: var(--text-muted); color: white; }
-
+ 
     /* EXPORT */
     .export-wrapper { position: relative; display: inline-block; margin-right: 4px; }
     .btn-export {
@@ -243,7 +226,7 @@
     }
     .export-menu.show { display: block; animation: fadeIn 0.2s; }
     .export-item { padding: 12px 18px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 1px solid var(--border); }
-
+ 
     /* FILTERS GRID */
     .filters-grid { display: flex; flex-wrap: wrap; gap: 14px; }
     .filter-item { flex-grow: 1; min-width: 150px; max-width: 220px; position: relative; }
@@ -255,7 +238,7 @@
     .multiselect-option { padding: 9px 12px; display: block; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 13px; color: var(--text-muted); }
     .select-all-option { padding: 10px; border-bottom: 2px solid var(--border); cursor: pointer; font-size: 12px; color: var(--accent); font-weight: 800; background: rgba(0,0,0,0.05); display: block; }
     .multiselect-option input, .select-all-option input { margin-right: 10px; accent-color: var(--primary); cursor: pointer; width: 14px; height: 14px; }
-
+ 
     /* TABLE & SCROLL */
     .table-wrapper { position: relative; margin-bottom: 40px; overflow: hidden; border-radius: 12px; }
     .table-container { border: 2px solid var(--border); overflow-x: auto; background: var(--bg-card); scroll-behavior: auto; }
@@ -269,14 +252,21 @@
     .scroll-btn:hover { opacity: 1 !important; cursor: w-resize; }
     .scroll-left { left: 0; background: linear-gradient(to right, rgba(0,0,0,0.9), transparent); }
     .scroll-right { right: 0; background: linear-gradient(to left, rgba(0,0,0,0.9), transparent); }
-
+ 
     table { width: 100%; border-collapse: collapse; border: none; border-spacing: 0; }
     th { background: var(--header-bg); color: var(--text-muted); padding: 15px; text-align: left; font-weight: 700; font-size: 12.5px; border-bottom: none !important; white-space: nowrap; text-transform: uppercase; letter-spacing: 1px; }
     td { padding: 13px 15px; border-bottom: none !important; font-size: 13.5px; color: var(--text-main); white-space: nowrap; }
     tr:hover { background: var(--hover-row); }
+    
+    .empty-val {
+        color: var(--empty-cell);
+        font-weight: 400;
+        font-size: 14px;
+        user-select: none;
+    }
       
     /* Sticky Details */
-    th:last-child, td:last-child {
+    th:last-child, td:last-child { 
         position: sticky; right: 0; 
         background-color: var(--sticky-bg); border-left: 2px solid var(--border); 
         text-align: center; padding: 13px 18px; z-index: 40; 
@@ -290,6 +280,18 @@
     .pn-cell:hover { color: var(--accent); text-decoration: underline; }
     .action-btn { background: transparent; border: 2px solid var(--primary); color: var(--primary); padding: 5px 12px; border-radius: 7px; cursor: pointer; font-weight: 700; font-size: 11px; transition: 0.2s; }
     .action-btn:hover { background: var(--primary); color: white; }
+    
+    /* --- NUOVI STILI AGGIUNTI PER I COLORI SEMANTICI --- */
+    .semantic-tag {
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-block;
+        white-space: nowrap;
+    }
 
     @media (max-width: 900px) {
         .header { flex-direction: column; height: auto; padding: 18px; }
@@ -299,7 +301,7 @@
         .header-center { margin: 12px 0; position: static; transform: none; }
         .landing-cards { flex-direction: column; }
     }
-
+ 
     /* LOADING SPINNER */
     #loading { display: flex; justify-content: center; align-items: center; margin-top: 90px; min-height: 180px; flex-direction: column; }
     .loading-spinner {
@@ -308,7 +310,7 @@
       animation: spin 1s cubic-bezier(0.6, -0.28, 0.735, 0.045) infinite;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
+ 
     /* ERROR BOX - IMPROVED */
     .error-box { 
         display: none; background: rgba(239, 68, 68, 0.1); 
@@ -318,7 +320,7 @@
         box-shadow: 0 20px 50px rgba(0,0,0,0.2); z-index: 9999; position: relative;
     }
     .error-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; display:block; }
-
+ 
     /* --- MODAL (ALWAYS WHITE FIX) --- */
     .modal-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 9000; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
     
@@ -341,7 +343,7 @@
     /* Modal Sub-elements (Forcing Light Theme for Content) */
     .modal-window h2, .modal-window h4 { color: #0F172A !important; }
     .close-modal { color: #0F172A !important; }
-
+ 
     /* --- CLEAN GRID DESIGN FOR MODAL DETAILS (MATCHING THEME) --- */
     .detail-section-title {
         font-size: 14px; font-weight: 800; color: #0070E0; 
@@ -353,7 +355,7 @@
         display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         gap: 12px;
     }
-
+ 
     /* CARD STYLE FOR ITEMS WITH VALUES */
     .detail-card-value {
         background: #F8FAFC; 
@@ -364,7 +366,7 @@
         transition: all 0.2s ease;
     }
     .detail-card-value:hover { border-color: #CBD5E1; }
-
+ 
     .detail-label-small {
         font-size: 11px; color: #64748B; font-weight: 700;
         text-transform: uppercase; margin-bottom: 4px;
@@ -373,7 +375,7 @@
         font-size: 13.5px; color: #0F172A; font-weight: 600;
         line-height: 1.4;
     }
-
+ 
     /* SIMPLE TAG STYLE FOR BOOLEAN ITEMS (Just the Name) */
     .detail-simple-tag {
         background: #FFFFFF;
@@ -401,34 +403,38 @@
     .modal-layout-full { grid-template-columns: 1fr; }
     .modal-product-img { max-width: 100%; max-height: 350px; object-fit: contain; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.2)); transition: transform 0.4s ease; }
     .modal-preview-card:hover .modal-product-img { transform: scale(1.1); }
-
+ 
+    /* MODAL COMMENT BOX STYLE */
+    .modal-comment-box {
+        margin-top: 20px;
+        padding: 16px;
+        background: #F0F9FF; /* Light Blue BG */
+        border-left: 4px solid #0284C7;
+        color: #0F172A;
+        font-size: 13.5px;
+        line-height: 1.5;
+        border-radius: 0 8px 8px 0;
+        font-style: italic;
+    }
+    .modal-comment-title {
+        font-weight: 800;
+        color: #0070E0;
+        font-size: 11px;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+        display: block;
+    }
+ 
     /* TOAST */
     #toast { visibility: hidden; min-width: 250px; background-color: #10B981; color: #fff; text-align: center; border-radius: 8px; padding: 14px; position: fixed; z-index: 10000; left: 50%; bottom: 40px; transform: translateX(-50%); font-weight: 700; font-size: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
     #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
     @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 40px; opacity: 1;} }
     @keyframes fadeout { from {bottom: 40px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-
-    /* AI CHAT */
-    #ai-fab { position: fixed; bottom: 35px; right: 35px; width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #3b82f6); color: white; box-shadow: 0 10px 35px rgba(37, 99, 235, 0.5); display: flex; align-items: center; justify-content: center; cursor: grab; z-index: 9999; font-size: 22px; border: none; transition: transform 0.2s, box-shadow 0.2s, opacity 0.5s; }
-    #ai-fab:active { cursor: grabbing; } #ai-fab:hover { transform: scale(1.1) !important; opacity: 1 !important; } #ai-fab.inactive { opacity: 0; pointer-events: none; } 
-    #ai-window { display: none; position: fixed; bottom: 100px; right: 35px; width: 400px; height: 600px; background: var(--chat-bg); border: 2px solid var(--border); border-radius: 20px; box-shadow: var(--chat-shadow); z-index: 9999; flex-direction: column; overflow: hidden; animation: floatUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-    #ai-window.open { display: flex; } @keyframes floatUp { from { opacity:0; transform:translateY(40px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
-    .ai-header { padding: 22px; background: var(--chat-header-bg); color: var(--chat-header-text); font-weight: 800; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); letter-spacing: 0.5px; }
-    .ai-body { flex: 1; padding: 22px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; font-size: 15px; }
-    .ai-msg { padding: 16px 20px; border-radius: 22px; max-width: 88%; line-height: 1.5; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.05); animation: popIn 0.3s ease-out forwards; }
-    @keyframes popIn { from { opacity:0; transform:translateY(10px) scale(0.98); } to { opacity:1; transform:translateY(0) scale(1); } }
-    .ai-msg.user { align-self: flex-end; background: var(--chat-user-grad); color: white; border-bottom-right-radius: 4px; }
-    .ai-msg.bot { align-self: flex-start; background: var(--chat-bot-bg); color: var(--chat-bot-text); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
-    .ai-input-area { padding: 22px; border-top: 2px solid var(--border); display: flex; gap: 12px; align-items: center; background: var(--chat-bg); }
-    .ai-input { flex: 1; padding: 14px 20px; border-radius: 28px; border: 2px solid var(--border); background: var(--bg-body); color: var(--text-main); outline: none; transition: 0.2s; font-size: 15px; }
-    .ai-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
-    .ai-send { width: 50px; height: 50px; border-radius: 50%; border: none; background: var(--primary); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-    .ai-send:hover { transform: scale(1.05); }
-    .key-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--chat-bg); z-index: 10; padding: 35px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+ 
   </style>
 </head>
 <body>
-
+ 
   <div class="header">
     <div class="header-left">
         <a href="https://mya.advantech.com/" target="_blank" class="logo-link">
@@ -446,31 +452,31 @@
       
     <div class="header-right">
         <button class="theme-toggle" onclick="toggleTheme()" title="Switch Theme">☀</button>
-
+ 
         <div class="search-wrapper">
             <input type="text" id="pn-search" class="search-input" placeholder="Search P/N..." autocomplete="off">
             <div id="search-suggestions-box"></div>
         </div>
-
+ 
         <button class="btn-help" onclick="toggleHelp()">HELP</button>
         
         <div id="help-banner">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <h3>Quick Guide</h3>
-                <span onclick="toggleHelp()" style="cursor:pointer; font-size:24px;">&times;</span>
+            <h3>Quick Guide</h3>
+            <span onclick="toggleHelp()" style="cursor:pointer; font-size:24px;">&times;</span>
             </div>
             <ul>
-                <li><b>Search:</b> Finds ALL products.</li>
-                <li><b>Filters:</b> Default MP. Click <strong>APPLY</strong>.</li>
-                <li><b>Links:</b> Click P/N for Product Page.</li>
+            <li><b>Search:</b> Finds ALL products.</li>
+            <li><b>Filters:</b> Default MP. Click <strong>APPLY</strong>.</li>
+            <li><b>Links:</b> Click P/N for Product Page.</li>
             </ul>
             <a href="mailto:Osama.GadAlla@advantech.it?subject=MYADVANTECHER - HELP" class="contact-link">
-                ✉ Contact Support
+            ✉ Contact Support
             </a>
         </div>
     </div>
   </div>
-
+ 
   <div class="content-wrapper">
       <div id="error-box" class="error-box"></div>
       
@@ -478,90 +484,92 @@
           <div class="loading-spinner"></div>
           <div id="loading-text" style="margin-top:18px; font-weight:600; color:var(--text-muted);">Loading Database...</div>
       </div>
-
+ 
       <div id="landing-page" style="display:none;">
         <div class="landing-title">SELECT PRODUCT CATEGORY</div>
         <div class="landing-cards">
             <div class="landing-card" onclick="selectCategory('monitor')">
-                 <svg class="landing-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                    <line x1="8" y1="21" x2="16" y2="21"></line>
-                    <line x1="12" y1="17" x2="12" y2="21"></line>
-                 </svg>
-                 <div class="landing-label">Industrial Monitor</div>
+             <svg class="landing-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+             </svg>
+             <div class="landing-label">Industrial Monitor</div>
             </div>
             <div class="landing-card" onclick="selectCategory('hmi')">
-                <svg class="landing-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                    <line x1="8" y1="21" x2="16" y2="21"></line>
-                    <line x1="12" y1="17" x2="12" y2="21"></line>
-                    <rect x="6" y="6" width="12" height="8"></rect>
-                 </svg>
-                 <div class="landing-label">Panel PC / HMI</div>
+            <svg class="landing-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+                <rect x="6" y="6" width="12" height="8"></rect>
+             </svg>
+             <div class="landing-label">Panel PC / HMI</div>
             </div>
         </div>
       </div>
-
+ 
       <div id="main-app-container">
           <div class="controls" id="controls" style="display:none;">
             <div class="controls-header">
-                <h3 class="controls-title">Configuration Filters</h3>
-                <div class="controls-actions">
-                     <select id="sort-order" class="sort-select" onchange="applyFilters()">
-                         <option value="status" selected>Sort: Status</option>
-                         <option value="original">Original Order</option>
-                         <option value="pn_asc">A-Z</option>
-                         <option value="pn_desc">Z-A</option>
-                         <option value="ltb_desc">LTB (New)</option>
-                         <option value="ltb_asc">LTB (Old)</option>
-                     </select>
-
-                     <div class="export-wrapper">
-                        <button class="btn-export" onclick="toggleExportMenu()" title="Download List">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        </button>
-                        <div id="export-menu" class="export-menu">
-                            <div class="export-item" onclick="exportData('xlsx')">Excel (.xlsx)</div>
-                            <div class="export-item" onclick="exportData('csv')">CSV (.csv)</div>
-                            <div class="export-item" onclick="exportData('pdf')">PDF (.pdf)</div>
-                        </div>
+            <h3 class="controls-title">Configuration Filters</h3>
+            <div class="controls-actions">
+                 <select id="sort-order" class="sort-select" onchange="applyFilters()">
+                     <option value="status" selected>Sort: Status</option>
+                     <option value="original">Original Order</option>
+                     <option value="pn_asc">A-Z</option>
+                     <option value="pn_desc">Z-A</option>
+                     <option value="ltb_desc">LTB (New)</option>
+                     <option value="ltb_asc">LTB (Old)</option>
+                 </select>
+ 
+                 <div class="export-wrapper">
+                    <button class="btn-export" onclick="toggleExportMenu()" title="Download List">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    </button>
+                    <div id="export-menu" class="export-menu">
+                        <div class="export-item" onclick="exportData('xlsx')">Excel (.xlsx)</div>
+                        <div class="export-item" onclick="exportData('csv')">CSV (.csv)</div>
+                        <div class="export-item" onclick="exportData('pdf')">PDF (.pdf)</div>
                     </div>
-
-                     <button class="btn-reset" onclick="resetFilters()">RESET</button>
-                     <button class="btn-apply" onclick="applyFilters()">APPLY FILTERS</button>
-                </div>
+                 </div>
+ 
+                 <button class="btn-reset" onclick="resetFilters()">RESET</button>
+                 <button class="btn-apply" onclick="applyFilters()">APPLY FILTERS</button>
+            </div>
             </div>
             <div id="filters-container" class="filters-grid"></div>
           </div>
-
+ 
           <div class="table-wrapper">
-              <button class="scroll-btn scroll-left" onmouseenter="startScrolling('left')" onmouseleave="stopScrolling()">‹</button>
-              
-              <div class="table-container" id="main-table-container">
-                <table id="data-table">
-                  <thead>
-                    <tr>
-                        <th>Status</th>
-                        <th>P/N</th>
-                        <th>LTB</th>
-                        <th>Work Env.</th>
-                        <th>Size</th>
-                        <th>Resolution</th>
-                        <th>CPU</th>
-                        <th>Touch</th>
-                        <th>Max Memory</th>
-                        <th width="110">Details</th>
-                    </tr>
-                  </thead>
-                  <tbody id="table-body"></tbody>
-                </table>
-              </div>
-
-              <button class="scroll-btn scroll-right" onmouseenter="startScrolling('right')" onmouseleave="stopScrolling()">›</button>
+            <button class="scroll-btn scroll-left" onmouseenter="startScrolling('left')" onmouseleave="stopScrolling()">‹</button>
+             
+            <div class="table-container" id="main-table-container">
+            <table id="data-table">
+              <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>P/N</th>
+                    <th>LTB</th>
+                    <th>Work Env.</th>
+                    <th>Vert. Sector</th>
+                    <th>Prod. Series</th>
+                    <th>Size</th>
+                    <th>Resolution</th>
+                    <th>CPU</th>
+                    <th>Touch</th>
+                    <th>Max Memory</th>
+                    <th width="110">Details</th>
+                </tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+            </div>
+ 
+            <button class="scroll-btn scroll-right" onmouseenter="startScrolling('right')" onmouseleave="stopScrolling()">›</button>
           </div>
       </div>
   </div>
-
+ 
   <div id="modal-overlay" class="modal-overlay" onclick="closeModal(event)">
     <div class="modal-window">
         <div class="modal-header">
@@ -577,58 +585,43 @@
           <img id="lightbox-img" src="" alt="Full Screen View">
       </div>
   </div>
-
-  <button id="ai-fab">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="M12 22a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2 2 2 0 0 1 2-2 2 2 0 0 1 2 2v2a2 2 0 0 1-2 2z"/><path d="M2 12a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2 2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/><path d="M22 12a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2h2a2 2 0 0 1 2 2z"/><rect x="8" y="8" width="8" height="8" rx="2"/></svg>
-  </button>
-  
-  <div id="ai-window">
-      <div class="ai-header">
-          <span class="ai-title">MYAI</span>
-          <span style="cursor:pointer; font-size:22px; opacity:0.8;" onclick="toggleAI()">&times;</span>
-      </div>
-      
-      <div id="ai-key-screen" class="key-screen">
-          <h3 style="margin-bottom:12px; color:var(--text-main); font-size: 18px;">Authenticate</h3>
-          <p style="font-size:14px; color:var(--text-muted); margin-bottom:25px;">
-              Enter your <b>Gemini API Key</b>.
-          </p>
-          <input type="password" id="api-key-input" class="ai-input" placeholder="AIzaSy..." style="margin-bottom:18px; text-align:center; border-color:var(--border);">
-          <button class="btn-apply" onclick="activateAI()" style="width:100%; padding: 12px;">CONNECT</button>
-      </div>
-
-      <div id="ai-chat-interface" style="display:none; flex-direction:column; height:100%;">
-          <div class="ai-body" id="ai-messages">
-              <div class="ai-msg bot">
-                  Hello. I've scanned the data. Ready to assist.
-              </div>
-          </div>
-          <div class="ai-input-area">
-              <input type="text" id="ai-user-input" class="ai-input" placeholder="Ask MYAI..." autocomplete="off" onkeypress="if(event.key==='Enter') sendAIMessage()">
-              <button class="ai-send" onclick="sendAIMessage()">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-              </button>
-          </div>
-      </div>
-  </div>
-
+ 
   <div id="toast">Copied!</div>
-
+ 
   <script>
     const EXCEL_FILE = 'DB.xlsx';
-
+ 
     // --- MAPPATURA COLONNE ---
     const COL_MAP_DB = {
-        'PN': 'P/N', 'Status': 'Status', 'LTB': 'LTB', 'size': 'Size', 'Resolution': 'Resolution', 
-        'Type': 'Touch Type', 'CPU': 'CPU', 'Memory': 'Memory supported', 'WorkEnv': 'WORK-ENVIROMENT',
-        'ManualLink': 'DatasheetLink', 'DirectLink': 'DirectLink', 'ThreeDLink': '3DLINK', 'TechLink': 'TECHINCALLINKS'
+        'PN': 'P/N', 
+        'Status': 'Status', 
+        'LTB': 'LTB', 
+        'size': 'Size', 
+        'Resolution': 'Resolution', 
+        'Type': 'Touch Type', 
+        'CPU': 'CPU', 
+        'Memory': 'Memory supported', 
+        'WorkEnv': 'WORK-ENVIROMENT',
+        'Vertical': 'VERTICAL SECTOR', 
+        'Comment': 'COMMENT', 
+        'Series': 'PRODUCT SERIES',
+        'ManualLink': 'DatasheetLink', 
+        'DirectLink': 'DirectLink', 
+        'ThreeDLink': '3DLINK', 
+        'TechLink': 'TECHINCALLINKS'
     };
-
+ 
     const UI_LABELS = {
-        'WorkEnv': 'Product Series', 'Type': 'Touch Technology', 'Memory': 'Max Memory',
-        'size': 'Screen Size', 'OS Support': 'Operating System', 'Mounting': 'Mounting Options'
+        'WorkEnv': 'Work Environment', 
+        'Type': 'Touch Technology', 
+        'Memory': 'Max Memory',
+        'size': 'Screen Size', 
+        'OS Support': 'Operating System', 
+        'Mounting': 'Mounting Options',
+        'Vertical': 'Vertical Sector',
+        'Series': 'Product Series'
     };
-
+ 
     const EXCLUSIONS = ["n/a", "-", "na", "", "configuration submitted successfully!", "undefined", "0", "a"];
       
     let INDISPENSABLE_FILTERS = []; 
@@ -639,129 +632,109 @@
     let CURRENT_VISIBLE_DATA = [];
     const HISTORY_KEY = 'mya_search_history';
     let loadingTimeout;
-
+ 
     document.addEventListener('DOMContentLoaded', initApp);
-
+ 
     async function initApp() {
         injectStyles(); 
-        setupDraggableAI(); 
-
+ 
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
-
+ 
         const search = document.getElementById('pn-search');
         if(search) {
             search.addEventListener('focus', () => { if(search.value.trim() === '') showSearchHistory(); });
             search.addEventListener('input', (e) => {
-                if(e.target.value.trim() === '') { showSearchHistory(); applyFilters(); } 
-                else { showSuggestions(e.target.value); if(e.target.value.length === 0) applyFilters(); }
+               if(e.target.value.trim() === '') { showSearchHistory(); applyFilters(); } 
+               else { showSuggestions(e.target.value); if(e.target.value.length === 0) applyFilters(); }
             });
             search.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    document.getElementById('search-suggestions-box').style.display = 'none';
-                    saveToHistory(search.value);
-                    applyFilters(true);
-                }
+               if (e.key === 'Enter') {
+                   document.getElementById('search-suggestions-box').style.display = 'none';
+                   saveToHistory(search.value);
+                   applyFilters(true);
+               }
             });
             document.addEventListener('click', (e) => { if(!e.target.closest('.search-wrapper')) document.getElementById('search-suggestions-box').style.display = 'none'; });
         }
         
-        // TIMEOUT FOR ERROR PROOFING
         loadingTimeout = setTimeout(() => {
             const loading = document.getElementById('loading');
             if(loading && loading.style.display !== 'none') {
-                showError(`
-                    <span class="error-title">⚠️ Data Loading Issue</span>
-                    It seems to be taking too long. Possible causes:<br><br>
-                    1. <b>DB.xlsx</b> is missing from the folder.<br>
-                    2. You are using <b>file://</b> protocol (Double-clicking HTML).<br>
-                    3. Please use a local server (like Live Server extension in VS Code).
-                `);
+               showError(`
+                <span class="error-title">⚠️ Data Loading Issue</span>
+                It seems to be taking too long. Possible causes:<br><br>
+                1. <b>DB.xlsx</b> is missing from the folder.<br>
+                2. You are using <b>file://</b> protocol (Double-clicking HTML).<br>
+                3. Please use a local server (like Live Server extension in VS Code).
+            `);
             }
         }, 3000); 
-
+ 
         await loadDatabase();
     }
-
+ 
     function returnToHome() {
         document.getElementById('main-app-container').style.display = 'none';
         document.getElementById('landing-page').style.display = 'flex';
     }
-
-    // --- SELECTION LOGIC (SORTING & ORIGINAL ORDER) ---
+ 
     function selectCategory(mode) {
         if(mode === 'monitor') {
             INDISPENSABLE_FILTERS = ['size', 'Type', 'Mounting'];
-            
-            // SORT FPM FIRST, REST ORIGINAL
             GLOBAL_DATA.sort((a, b) => {
-                const pnA = String(a.PN).toUpperCase();
-                const pnB = String(b.PN).toUpperCase();
-                const isFPM_A = pnA.startsWith("FPM");
-                const isFPM_B = pnB.startsWith("FPM");
-
-                if (isFPM_A && !isFPM_B) return -1; // A first
-                if (!isFPM_A && isFPM_B) return 1;  // B first
-                
-                // Keep original ID order if not FPM logic
-                return (a._id || 0) - (b._id || 0); 
+               const pnA = String(a.PN).toUpperCase();
+               const pnB = String(b.PN).toUpperCase();
+               const isFPM_A = pnA.startsWith("FPM");
+               const isFPM_B = pnB.startsWith("FPM");
+               if (isFPM_A && !isFPM_B) return -1;
+               if (!isFPM_A && isFPM_B) return 1; 
+               return (a._id || 0) - (b._id || 0); 
             });
-
         } else {
-            // HMI
             INDISPENSABLE_FILTERS = ['size', 'Type', 'Mounting', 'CPU', 'Memory'];
-            
-            // SORT FPM LAST, REST ORIGINAL
             GLOBAL_DATA.sort((a, b) => {
-                const pnA = String(a.PN).toUpperCase();
-                const pnB = String(b.PN).toUpperCase();
-                const isFPM_A = pnA.startsWith("FPM");
-                const isFPM_B = pnB.startsWith("FPM");
-
-                if (!isFPM_A && isFPM_B) return -1; // A (non-FPM) first
-                if (isFPM_A && !isFPM_B) return 1;  // B (non-FPM) first
-                
-                // Keep original ID order if not FPM logic
-                return (a._id || 0) - (b._id || 0);
+               const pnA = String(a.PN).toUpperCase();
+               const pnB = String(b.PN).toUpperCase();
+               const isFPM_A = pnA.startsWith("FPM");
+               const isFPM_B = pnB.startsWith("FPM");
+               if (!isFPM_A && isFPM_B) return -1;
+               if (isFPM_A && !isFPM_B) return 1; 
+               return (a._id || 0) - (b._id || 0);
             });
         }
-
-        // Hide Landing, Show Main
         document.getElementById('landing-page').style.display = 'none';
         document.getElementById('main-app-container').style.display = 'block';
         document.getElementById('controls').style.display = 'block';
-
-        // Re-build filters based on selection
         buildFilters();
         applyFilters();
     }
-
+ 
     function injectStyles() {
         const style = document.createElement('style');
         style.innerHTML = `
             @keyframes bounceIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
-            /* UPDATED BUTTON STYLE: Primary Gradient, Solid, Clean */
             .btn-impact { 
-                background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); 
-                color: white; 
-                border: none; 
-                padding: 10px 24px; 
-                border-radius: 8px; 
-                font-weight: 700; 
-                text-transform: uppercase; 
-                letter-spacing: 0.5px; 
-                text-decoration: none; 
-                display: inline-flex; 
-                align-items: center; 
-                gap: 10px; 
-                font-size: 13px; 
-                transition: all 0.2s ease; 
-                box-shadow: 0 4px 15px rgba(0, 112, 224, 0.25); 
+               background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); 
+               color: white; 
+               border: none; 
+               padding: 10px 24px; 
+               border-radius: 8px; 
+               font-weight: 700; 
+               text-transform: uppercase; 
+               letter-spacing: 0.5px; 
+               text-decoration: none; 
+               display: inline-flex; 
+               align-items: center; 
+               gap: 10px; 
+               font-size: 13px; 
+               transition: all 0.2s ease; 
+               box-shadow: 0 4px 15px rgba(0, 112, 224, 0.25); 
             }
             .btn-impact:hover { 
-                transform: translateY(-2px); 
-                box-shadow: 0 6px 20px rgba(0, 112, 224, 0.4); 
+               transform: translateY(-2px); 
+               box-shadow: 0 6px 20px rgba(0, 112, 224, 0.4); 
             }
             .btn-impact svg { width: 18px; height: 18px; transition: transform 0.3s; } 
             .btn-impact:hover svg { animation: bounceIcon 0.8s infinite; }
@@ -775,30 +748,30 @@
             .filter-dropdown-item:hover { background: var(--hover-row); }
             .filter-dropdown-item input { accent-color: var(--primary); width: 18px; height: 18px; cursor: pointer; }
             
-            /* UPDATED IMAGE STYLES: No Border, No Background, Transparent Multiply Effect */
+            /* UPDATED IMAGE STYLES */
             .modal-preview-card { 
-                background: transparent !important; 
-                border: none !important; 
-                box-shadow: none !important; 
-                padding: 0 !important; 
-                display: flex; 
-                flex-direction: column; 
-                align-items: center; 
-                justify-content: center; 
-                height: auto; 
-                min-height: 300px; 
-                position: relative; 
-                cursor: zoom-in; 
-                transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
+               background: transparent !important; 
+               border: none !important; 
+               box-shadow: none !important; 
+               padding: 0 !important; 
+               display: flex; 
+               flex-direction: column; 
+               align-items: center; 
+               justify-content: center; 
+               height: auto; 
+               min-height: 300px; 
+               position: relative; 
+               cursor: zoom-in; 
+               transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); 
             }
             .modal-preview-card:hover { transform: translateY(-5px); }
             .modal-product-img { 
-                max-width: 100%; 
-                max-height: 350px; 
-                object-fit: contain; 
-                filter: none !important; /* REMOVED DROP SHADOW */
-                mix-blend-mode: multiply; /* TRICK: Makes white backgrounds in JPGs transparent */
-                transition: transform 0.4s ease; 
+               max-width: 100%; 
+               max-height: 350px; 
+               object-fit: contain; 
+               filter: none !important;
+               mix-blend-mode: multiply;
+               transition: transform 0.4s ease; 
             }
             .modal-preview-card:hover .modal-product-img { transform: scale(1.1); }
             
@@ -808,39 +781,99 @@
             .lightbox-content img { max-width: 90vw; max-height: 90vh; filter: drop-shadow(0 0 80px rgba(0,0,0,0.5)); animation: scaleInLightbox 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
             @keyframes fadeInLightbox { from { opacity: 0; } to { opacity: 1; } }
             @keyframes scaleInLightbox { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+            
+            /* --- COMPATIBILITY SECTION STYLES (LIGHTER THEME) --- */
+            .comp-section {
+                margin-top: 40px;
+                border: 2px solid #38BDF8; /* Lighter Blue Border */
+                border-radius: 8px;
+                overflow: hidden;
+                font-family: 'Inter', sans-serif;
+                background: #FFFFFF;
+            }
+            .comp-header {
+                /* Gradiente più leggero e luminoso */
+                background: linear-gradient(135deg, #38BDF8 0%, #0070E0 100%); 
+                color: #FFFFFF;
+                padding: 12px 18px;
+                font-weight: 800;
+                font-size: 14px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .comp-body {
+                padding: 20px;
+                background: #0F172A;
+                color: #FFFFFF;
+            }
+            .comp-bar-container {
+                margin-bottom: 20px;
+            }
+            .comp-score-label {
+                display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #94A3B8; font-weight: 600;
+            }
+            .comp-progress-bg {
+                height: 12px; width: 100%; background: #334155; border-radius: 6px; overflow: hidden;
+            }
+            .comp-progress-fill {
+                height: 100%; background: #10B981; border-radius: 6px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .comp-grid {
+                display: grid;
+                grid-template-columns: 1fr 1px 1fr;
+                gap: 20px;
+                align-items: center;
+            }
+            .comp-divider {
+                width: 1px; height: 100%; background: #334155;
+            }
+            .comp-col {
+                display: flex; flex-direction: column; gap: 4px;
+            }
+            .comp-label {
+                font-size: 11px; 
+                color: #94A3B8; 
+                font-weight: 800; 
+                text-transform: uppercase; 
+                letter-spacing: 0.5px;
+                margin-bottom: 5px;
+                display: block;
+            }
+            .comp-pn {
+                font-size: 20px; font-weight: 900; color: #FFFFFF; margin: 4px 0;
+            }
+            .internal-link-action {
+                cursor: pointer;
+                color: #38BDF8;
+                border-bottom: 2px dashed #38BDF8;
+                transition: all 0.2s;
+                display: inline-block;
+            }
+            .internal-link-action:hover {
+                color: #ffffff;
+                border-bottom-style: solid;
+                border-color: #ffffff;
+            }
+            .comp-specs {
+                font-size: 12px; color: #94A3B8; line-height: 1.4;
+            }
+            .comp-highlight {
+                color: #10B981; font-weight: 700;
+            }
+            .comp-ltb {
+                font-size: 11px; color: #F87171; font-weight: 700; margin-top: 4px;
+            }
+            .comp-ltb.good { color: #10B981; }
         `;
         document.head.appendChild(style);
     }
-
-    function setupDraggableAI() {
-        const fab = document.getElementById('ai-fab');
-        let isDragging = false;
-        let startX, startY, initialLeft, initialTop;
-        let inactivityTimer;
-        const resetInactivity = () => {
-            fab.classList.remove('inactive'); clearTimeout(inactivityTimer);
-            inactivityTimer = setTimeout(() => { fab.classList.add('inactive'); }, 3000);
-        };
-        document.addEventListener('mousemove', resetInactivity);
-        resetInactivity();
-        fab.addEventListener('mousedown', (e) => {
-            isDragging = true; startX = e.clientX; startY = e.clientY;
-            const rect = fab.getBoundingClientRect();
-            fab.style.bottom = 'auto'; fab.style.right = 'auto'; fab.style.left = rect.left + 'px'; fab.style.top = rect.top + 'px';
-            initialLeft = rect.left; initialTop = rect.top; fab.style.transition = 'none'; e.preventDefault();
-        });
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            const dx = e.clientX - startX; const dy = e.clientY - startY;
-            fab.style.left = `${initialLeft + dx}px`; fab.style.top = `${initialTop + dy}px`;
-        });
-        document.addEventListener('mouseup', () => { if(isDragging) { isDragging = false; fab.style.transition = 'transform 0.2s, box-shadow 0.2s, opacity 0.5s'; } });
-        fab.addEventListener('click', (e) => { });
-    }
-
+ 
     function openLightbox(url) { if(!url) return; const overlay = document.getElementById('lightbox-overlay'); const img = document.getElementById('lightbox-img'); img.src = url; overlay.style.display = 'flex'; }
     function closeLightbox() { const overlay = document.getElementById('lightbox-overlay'); overlay.style.display = 'none'; document.getElementById('lightbox-img').src = ''; }
-
+ 
     function parseDate(val) { 
         if(!val) return null; if(val instanceof Date) return val;
         if(typeof val === 'string' && val.includes('/')) {
@@ -858,34 +891,29 @@
         } 
         return val; 
     }
-
+ 
+    // --- FUNZIONE PER SEMPLIFICARE I VALORI ---
     function simplifyValue(val, key) {
-        if (!val) return val; 
+        if (!val) return ""; 
         const s = String(val).trim(); 
         const low = s.toLowerCase();
+ 
         if (key === 'size') return s.replace(/["']/g, '').trim();
         if (key === 'Type') {
-            if (low.includes('combo') || low.includes('pcap') || low.includes('projected')) return 'P-CAP';
+            if (low.includes('combo') || low.includes('pcap') || low.includes('projected')) return 'Pcap'; 
             if (low.includes('res')) return 'Resistive';
             return s;
         }
+        // WorkEnv Cleaning (Uniformed for color logic)
         if (key === 'WorkEnv') {
+            if (low.includes('class 1') || low.includes('c1d2')) return 'Explosion / Oil & Gas';
+            if (low.includes('outdoor') || low.includes('sunlight')) return 'Outdoor / Harsher';
+            if (low.includes('general') || low.includes('basic')) return 'General Purpose';
             if (low.includes('embedded')) return 'Embedded';
-            if (low.includes('general') || low.includes('basic')) return 'Basic / General';
-            if (low.includes('enhanced') || low.includes('harsher')) return 'Enhanced';
-            if (low.includes('robust') || low.includes('oil')) return 'Robust / Explosion';
-            if (low.includes('modular')) return 'Modular';
             return s;
         }
-        if (key === 'CPU') {
-            if (low.includes('i7')) return 'Core i7'; if (low.includes('i5')) return 'Core i5'; if (low.includes('i3')) return 'Core i3';
-            if (low.includes('celeron') || low.includes('j1900') || low.includes('j3455') || low.includes('n2930')) return 'Celeron';
-            if (low.includes('atom') || low.includes('x6') || low.includes('e3940')) return 'Atom';
-            if (low.includes('pentium') || low.includes('n4200')) return 'Pentium';
-            if (low.includes('ryzen')) return 'Ryzen'; if (low.includes('xeon')) return 'Xeon';
-            if (low.includes('arm') || low.includes('cortex')) return 'ARM / RISC'; return 'Other'; 
-        }
-        if (key === 'Memory') { const match = s.match(/(\d+)\s*G/i); if (match) return match[1] + ' GB'; return 'Other'; }
+        
+        // Clean OS
         if (key.toLowerCase().includes('os')) {
             if (low.includes('win') || low.includes('ws7')) return 'Windows';
             if (low.includes('android')) return 'Android';
@@ -895,6 +923,77 @@
         return s;
     }
 
+    // --- NUOVA FUNZIONE PER FILTRI PULITI (Raggruppamento) ---
+    // Usata SOLO per generare le opzioni dei filtri dropdown
+    function simplifyForFilter(val, key) {
+        let s = simplifyValue(val, key);
+        let low = s.toLowerCase();
+
+        // Raggruppamento CPU per Filtri più puliti
+        if (key === 'CPU') {
+            if (low.includes('i7')) return 'Core i7 Family';
+            if (low.includes('i5')) return 'Core i5 Family';
+            if (low.includes('i3')) return 'Core i3 Family';
+            if (low.includes('atom')) return 'Atom Family';
+            if (low.includes('celeron') || low.includes('j1900') || low.includes('j6412')) return 'Celeron Family';
+            if (low.includes('xeon')) return 'Xeon Server';
+            if (low.includes('risc') || low.includes('arm') || low.includes('cortex')) return 'RISC / ARM';
+            if (low.includes('pentium')) return 'Pentium';
+        }
+        
+        // Raggruppamento Risoluzione
+        if (key === 'Resolution') {
+            if (low.includes('1920') && low.includes('1080')) return 'FHD (1920x1080)';
+            if (low.includes('1024') && low.includes('768')) return 'XGA (1024x768)';
+            if (low.includes('1280') && low.includes('800')) return 'WXGA (1280x800)';
+            if (low.includes('1366')) return 'HD (1366x768)';
+            if (low.includes('800') && low.includes('600')) return 'SVGA (800x600)';
+        }
+
+        return s;
+    }
+
+    // --- FUNZIONE UNIFICATA PER COLORI SEMANTICI ---
+    function getSemanticStyle(val, type) {
+        if (!val || val === '-' || val === '0') return 'color: var(--text-muted); opacity: 0.7;';
+        const v = String(val).toLowerCase();
+
+        // 1. WORK ENVIRONMENT (Sicurezza e Robustezza)
+        if (type === 'WorkEnv') {
+            if (v.includes('explosion') || v.includes('oil') || v.includes('robust')) 
+                return 'color: #991B1B; background: #FEE2E2; border: 1px solid #FECACA;'; // Rosso (Pericolo/Attenzione)
+            if (v.includes('harsher') || v.includes('outdoor')) 
+                return 'color: #9A3412; background: #FFEDD5; border: 1px solid #FED7AA;'; // Arancio (Ambiente difficile)
+            if (v.includes('embedded') || v.includes('open frame')) 
+                return 'color: #166534; background: #DCFCE7; border: 1px solid #BBF7D0;'; // Verde (Standard/Embedded)
+            return 'color: #1E40AF; background: #DBEAFE;'; // Blu (General Purpose)
+        }
+
+        // 2. VERTICAL SECTOR (Codice colore industriale)
+        if (type === 'Vertical') {
+            if (v.includes('rail') || v.includes('transport') || v.includes('vehicle')) 
+                return 'color: #B45309; background: #FEF3C7;'; // Giallo Ambra (Trasporti/Segnaletica)
+            if (v.includes('medic') || v.includes('health')) 
+                return 'color: #BE185D; background: #FCE7F3;'; // Rosa/Viola (Medicale)
+            if (v.includes('food') || v.includes('beverage')) 
+                return 'color: #059669; background: #D1FAE5;'; // Verde Smeraldo (Igiene)
+            if (v.includes('automat') || v.includes('factory') || v.includes('iot')) 
+                return 'color: #0369A1; background: #E0F2FE;'; // Azzurro Tecnico (Automazione)
+            return 'color: #475569; background: #F1F5F9;'; // Grigio (Generico)
+        }
+
+        // 3. PRODUCT SERIES (Identità di prodotto)
+        if (type === 'Series') {
+            if (v.startsWith('ppc')) return 'color: #4338CA; background: #E0E7FF; font-weight:800;'; // Indaco (High Performance)
+            if (v.startsWith('fpm')) return 'color: #0F766E; background: #CCFBF1; font-weight:800;'; // Teal (Monitor)
+            if (v.startsWith('tpc')) return 'color: #EA580C; background: #FFEDD5; font-weight:800;'; // Arancio (Touch Panel)
+            if (v.startsWith('uno')) return 'color: #374151; background: #E5E7EB; font-weight:800;'; // Grigio Scuro (Box)
+            return 'color: var(--primary); background: rgba(0,112,224,0.1); font-weight:800;';
+        }
+
+        return '';
+    }
+ 
     function cleanExtractedUrl(url) {
         if (!url || typeof url !== 'string' || url.length < 3) return "";
         let clean = url.trim();
@@ -911,43 +1010,40 @@
         }
         return clean;
     }
-
+ 
     async function loadDatabase() {
         try {
-            // SAFETY CHECKS
-            if (window.location.protocol === 'file:') throw new Error("CORS ERROR: Browsers block reading local files directly. Please use a Local Server (e.g., Live Server in VS Code) or upload to a web host.");
-            if (typeof XLSX === 'undefined') throw new Error("Library Error: xlsx.bundle.js failed to load. Check your internet connection or CDN.");
-
+            if (window.location.protocol === 'file:') throw new Error("CORS ERROR: Browsers block reading local files directly. Please use a Local Server.");
+            if (typeof XLSX === 'undefined') throw new Error("Library Error: xlsx.bundle.js failed to load.");
+ 
             const response = await fetch(EXCEL_FILE);
-            if (response.status === 404) throw new Error("File Not Found: DB.xlsx is missing from the folder.");
+            if (response.status === 404) throw new Error("File Not Found: DB.xlsx is missing.");
             if (!response.ok) throw new Error("Network Error: Cannot load DB.xlsx.");
             
             const buffer = await response.arrayBuffer();
             const workbook = XLSX.read(buffer, { type: 'array', cellDates: true });
             
             if (!workbook.Sheets['DB'] || !workbook.Sheets['DB2']) throw new Error("Invalid Excel: Missing Sheets 'DB' or 'DB2'.");
-
+ 
             clearTimeout(loadingTimeout);
-
+ 
             const ws = workbook.Sheets['DB'];
             const range = XLSX.utils.decode_range(ws['!ref']);
-
+ 
             let headerRowIndex = 0;
             for (let r = range.s.r; r <= Math.min(range.e.r, 20); r++) {
                 let rowHasPN = false;
                 for(let c = range.s.c; c <= range.e.c; c++) {
                     const cell = ws[XLSX.utils.encode_cell({r: r, c: c})];
                     if(cell && cell.v && String(cell.v).toUpperCase().includes('P/N')) {
-                        rowHasPN = true;
-                        headerRowIndex = r;
-                        break;
+                        rowHasPN = true; headerRowIndex = r; break;
                     }
                 }
                 if (rowHasPN) break;
             }
             
             const rawDB = XLSX.utils.sheet_to_json(workbook.Sheets['DB'], { range: headerRowIndex, defval: "", blankrows: true }); 
-
+ 
             const sheet2 = workbook.Sheets['DB2'];
             const range2 = XLSX.utils.decode_range(sheet2['!ref']);
             let categories = [], attributes = [];
@@ -964,7 +1060,7 @@
                     DB2_STRUCTURE[categories[C]].push(attributes[C]);
                 }
             }
-
+ 
             const rawDB2 = XLSX.utils.sheet_to_json(sheet2, { range: 1, defval: "" });
             const db2Map = {};
             
@@ -988,30 +1084,28 @@
                             }
                             if(!foundCat) { if(!db2Map[pn][cleanKey]) db2Map[pn][cleanKey] = []; db2Map[pn][cleanKey].push({ label: cleanKey, value: cellVal }); }
                         } else if (cellVal.toLowerCase() === 'a') {
-                            let foundCat = false;
                              for(let cat in DB2_STRUCTURE) {
-                                if(DB2_STRUCTURE[cat].includes(cleanKey)) { if(!db2Map[pn][cat]) db2Map[pn][cat] = []; db2Map[pn][cat].push({ label: cleanKey, value: cellVal }); foundCat = true; }
-                            }
+                                 if(DB2_STRUCTURE[cat].includes(cleanKey)) { if(!db2Map[pn][cat]) db2Map[pn][cat] = []; db2Map[pn][cat].push({ label: cleanKey, value: cellVal }); }
+                             }
                         }
                     }
                 }
             });
-
+ 
             const today = new Date().setHours(0,0,0,0);
-
-            // SAVE ORIGINAL INDEX
+ 
             GLOBAL_DATA = rawDB
                 .map((row, index) => {
-                    let item = { _id: index }; // Preserve original Excel order
+                    let item = { _id: index };
                     let keys = Object.keys(row);
                     let pnKey = keys.find(k => k.toUpperCase().includes('P/N'));
                     let statusKey = keys.find(k => k.toUpperCase().includes('STATUS'));
                     
                     if (!pnKey || !row[pnKey] || String(row[pnKey]).trim().length === 0 || !statusKey) return null;
-
+ 
                     let imgKey = keys.find(k => k.trim().toUpperCase() === 'PRIMAGE');
                     item.ImageURL = imgKey ? cleanExtractedUrl(String(row[imgKey])) : "";
-
+ 
                     for (let k in COL_MAP_DB) {
                         let excelKey = COL_MAP_DB[k];
                         let foundKey = keys.find(x => x.trim().toUpperCase() === excelKey.trim().toUpperCase());
@@ -1021,10 +1115,10 @@
                     
                     item._DIRECT_LINK = (!item.DirectLink || item.DirectLink.length < 5) ? "" : cleanExtractedUrl(item.DirectLink);
                     item.ManualLink = (item.ManualLink && item.ManualLink.length > 5) ? cleanExtractedUrl(item.ManualLink) : "";
-
+ 
                     const pn = item.PN;
                     item._DETAILS = db2Map[pn] || {};
-                    item._SEARCH_STR = [item.PN, item.Status, item.CPU, item.Memory, item.size, item.Resolution, item.Type, item.WorkEnv].join(" || ").toLowerCase(); 
+                    item._SEARCH_STR = [item.PN, item.Status, item.CPU, item.Memory, item.size, item.Resolution, item.Type, item.WorkEnv, item.Vertical, item.Series].join(" || ").toLowerCase(); 
                     
                     let ltbDate = parseDate(item.LTB);
                     if(ltbDate && ltbDate.getTime() < today) item.Status = 'EOL';
@@ -1032,12 +1126,12 @@
                     return item;
                 })
                 .filter(item => item !== null);
-
+ 
             document.getElementById('loading').style.display = 'none';
             document.getElementById('landing-page').style.display = 'flex'; 
         } catch (err) { showError(err.message); }
     }
-
+ 
     function normalize(val, key) { 
         if (val == null) return ""; 
         if (key === 'LTB') return val; 
@@ -1045,14 +1139,14 @@
         if (key === 'size') { let n = parseFloat(s); if (!isNaN(n) && !s.includes('"')) return n + '"'; } 
         return s; 
     }
-
+ 
     function startScrolling(direction) {
         const container = document.getElementById('main-table-container'); const speed = 30; 
         function animate() { if (direction === 'left') container.scrollLeft -= speed; else container.scrollLeft += speed; scrollAnimationId = requestAnimationFrame(animate); }
         stopScrolling(); animate(); 
     }
     function stopScrolling() { if (scrollAnimationId) { cancelAnimationFrame(scrollAnimationId); scrollAnimationId = null; } }
-
+ 
     function showSuggestions(val) {
         const box = document.getElementById('search-suggestions-box');
         if (!val || val.length < 2) { box.style.display = 'none'; return; }
@@ -1085,12 +1179,12 @@
         history.map(term => `<div class="suggestion-item" onclick="selectSuggestion('${term.replace(/"/g, '&quot;')}')"><strong>${term}</strong></div>`).join('');
         box.style.display = 'block';
     }
-
+ 
     function buildFilters() {
         const container = document.getElementById('filters-container'); container.innerHTML = '';
         const validData = GLOBAL_DATA.filter(i => ['MP', 'ES', 'NEW'].includes(String(i.Status).trim().toUpperCase()));
         let allFilters = [];
-        ['LTB', 'size', 'Resolution', 'Type', 'CPU', 'Memory', 'WorkEnv'].forEach(key => allFilters.push({ key: key, isDB2: false }));
+        ['LTB', 'size', 'Resolution', 'Type', 'CPU', 'Memory', 'WorkEnv', 'Vertical', 'Series'].forEach(key => allFilters.push({ key: key, isDB2: false }));
         let db2Keys = new Set();
         validData.forEach(item => { if(item._DETAILS) Object.keys(item._DETAILS).forEach(k => { if(!k.startsWith('__') && k.toLowerCase() !== 'empty') db2Keys.add(k); }); });
         db2Keys.forEach(k => { if(k.toLowerCase() !== 'p/n') allFilters.push({ key: k, isDB2: true }); });
@@ -1098,8 +1192,8 @@
         allFilters.forEach(f => {
             const isIndispensable = INDISPENSABLE_FILTERS.some(ind => ind.toLowerCase() === f.key.toLowerCase());
             if (isIndispensable || OPTIONAL_FILTERS_STATE[f.key]) {
-                let uniqueVals = getUniqueValues(validData, f.key, f.isDB2);
-                if(uniqueVals.length > 0) createFilterUI(f.key, uniqueVals, container, f.isDB2);
+               let uniqueVals = getUniqueValues(validData, f.key, f.isDB2);
+               if(uniqueVals.length > 0) createFilterUI(f.key, uniqueVals, container, f.isDB2);
             }
         });
         const addBtnContainer = document.createElement('div');
@@ -1108,38 +1202,44 @@
         const availableToAdd = allFilters.filter(f => !INDISPENSABLE_FILTERS.some(ind => ind.toLowerCase() === f.key.toLowerCase())).sort((a,b) => a.key.localeCompare(b.key));
         if (availableToAdd.length > 0) {
             let menuHtml = availableToAdd.map(f => {
-                const isChecked = OPTIONAL_FILTERS_STATE[f.key] ? 'checked' : '';
-                let displayLabel = UI_LABELS[f.key] || (f.key.charAt(0).toUpperCase() + f.key.slice(1));
-                return `<label class="filter-dropdown-item"><input type="checkbox" ${isChecked} onchange="toggleOptionalFilter('${f.key}')">${displayLabel}</label>`;
+               const isChecked = OPTIONAL_FILTERS_STATE[f.key] ? 'checked' : '';
+               let displayLabel = UI_LABELS[f.key] || (f.key.charAt(0).toUpperCase() + f.key.slice(1));
+               return `<label class="filter-dropdown-item"><input type="checkbox" ${isChecked} onchange="toggleOptionalFilter('${f.key}')">${displayLabel}</label>`;
             }).join('');
             addBtnContainer.innerHTML = `<button class="btn-filter-manage" onclick="toggleAddMenu()" title="Customize Filters"><span>✚</span> Customize Filters</button><div id="add-filter-menu" class="filter-dropdown-menu"><div class="filter-dropdown-header">Manage View</div>${menuHtml}</div>`;
             container.appendChild(addBtnContainer);
         }
     }
-
+ 
     function toggleAddMenu() { const menu = document.getElementById('add-filter-menu'); document.querySelectorAll('.multiselect-content').forEach(e => e.classList.remove('show')); menu.classList.toggle('show'); }
     document.addEventListener('click', (e) => { if (!e.target.closest('.add-filter-container')) { const menu = document.getElementById('add-filter-menu'); if(menu) menu.classList.remove('show'); } });
     function toggleOptionalFilter(key) { if (OPTIONAL_FILTERS_STATE[key]) { delete OPTIONAL_FILTERS_STATE[key]; if(ACTIVE_FILTERS[key]) delete ACTIVE_FILTERS[key]; } else { OPTIONAL_FILTERS_STATE[key] = true; } buildFilters(); applyFilters(); }
+    
     function getUniqueValues(dataSet, key, isDB2) {
         let vals = new Set();
         dataSet.forEach(i => { 
             if(!isDB2) {
                 let rawVal = i[key];
-                if(rawVal && rawVal !== '-' && !EXCLUSIONS.includes(String(rawVal).toLowerCase())) { if(key === 'LTB') vals.add(formatDate(rawVal)); else vals.add(simplifyValue(rawVal, key)); }
+                if(rawVal && rawVal !== '-' && !EXCLUSIONS.includes(String(rawVal).toLowerCase())) { 
+                    if(key === 'LTB') vals.add(formatDate(rawVal)); 
+                    else vals.add(simplifyForFilter(rawVal, key)); // Use Simplified for Filters
+                }
             } else {
                 if(i._DETAILS && i._DETAILS[key]) {
                     i._DETAILS[key].forEach(attr => {
                         let val = attr.value; let label = attr.label;
                         if (key === 'Mounting' && String(val).toLowerCase().includes('wall')) return;
                         if (val && (val.toLowerCase() === 'a' || val.toLowerCase() === 'y' || val.toLowerCase() === 'yes')) vals.add(label);
-                        else if (val && !EXCLUSIONS.includes(String(val).toLowerCase())) vals.add(simplifyValue(val, key));
+                        else if (val && !EXCLUSIONS.includes(String(val).toLowerCase())) vals.add(simplifyForFilter(val, key));
                     });
                 }
             }
         });
         return Array.from(vals).sort((a, b) => { if (key === 'LTB') { let dA = parseDDMMYYYY(a), dB = parseDDMMYYYY(b); return dB - dA; } if (key === 'Memory') { return parseInt(a) - parseInt(b); } return a.localeCompare(b, undefined, {numeric:true, sensitivity:'base'}); });
     }
+    
     function parseDDMMYYYY(s) { if(!s) return 0; let parts = s.split('/'); if(parts.length === 3) return new Date(parts[2], parts[1]-1, parts[0]).getTime(); return 0; }
+    
     function createFilterUI(key, options, container, isDB2 = false) {
         if(options.length === 0) return;
         let label = UI_LABELS[key] || (key.charAt(0).toUpperCase() + key.slice(1));
@@ -1150,6 +1250,7 @@
     function toggleDD(key) { let el = document.getElementById(`dd-${key}`); let open = el.classList.contains('show'); document.querySelectorAll('.multiselect-content').forEach(e => e.classList.remove('show')); if(!open) el.classList.add('show'); }
     function toggleSelectAll(key, source, isDB2) { let checkboxes = document.querySelectorAll(`#dd-${key} input:not(.select-all-option input)`); checkboxes.forEach(cb => cb.checked = source.checked); updateLocalState(key, isDB2); }
     function updateLocalState(key, isDB2) { let chk = document.querySelectorAll(`#dd-${key} input:not(.select-all-option input):checked`); let btn = document.getElementById(`btn-${key}`); let all = document.querySelectorAll(`#dd-${key} input:not(.select-all-option input)`).length; let selectAllBox = document.querySelector(`#dd-${key} .select-all-option input`); if(selectAllBox) selectAllBox.checked = (chk.length === all); if(chk.length===0) btn.innerText="None"; else if(chk.length===all) btn.innerText="All Selected"; else btn.innerText=`${chk.length} Selected`; ACTIVE_FILTERS[key] = { vals: Array.from(chk).map(c => c.value), isDB2: isDB2 }; applyFilters(); }
+    
     function resetFilters() { ACTIVE_FILTERS = {}; document.getElementById('pn-search').value = ''; document.getElementById('sort-order').value = 'status'; OPTIONAL_FILTERS_STATE = {}; buildFilters(); document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = true); document.querySelectorAll('.multiselect-btn').forEach(b => b.innerText = "All Selected"); applyFilters(); document.getElementById('main-table-container').scrollLeft = 0; }
     function resetFilterStateOnly() { document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = true); document.querySelectorAll('.multiselect-btn').forEach(b => b.innerText = "All Selected"); ACTIVE_FILTERS = {}; }
     
@@ -1158,119 +1259,223 @@
         let res = GLOBAL_DATA.filter(item => {
             if (!isSearchOverride && searchRaw.length === 0) { if (item.Status === 'EOL') return false; }
             if (searchTerms.length > 0) {
-                let itemStr = item._SEARCH_STR; 
-                let match = searchTerms.every(term => { if (/^i[3579]$/.test(term)) return new RegExp(`\\b${term}\\b`, 'i').test(itemStr); if (/^\d+gb$/.test(term)) return new RegExp(`\\b${term}\\b`, 'i').test(itemStr); return itemStr.includes(term); });
-                if (!match) return false;
+               let itemStr = item._SEARCH_STR; 
+               let match = searchTerms.every(term => { if (/^i[3579]$/.test(term)) return new RegExp(`\\b${term}\\b`, 'i').test(itemStr); if (/^\d+gb$/.test(term)) return new RegExp(`\\b${term}\\b`, 'i').test(itemStr); return itemStr.includes(term); });
+               if (!match) return false;
             }
             for (let k in ACTIVE_FILTERS) {
-                let filter = ACTIVE_FILTERS[k]; let allowed = filter.vals; if(allowed.length === 0) return false; 
-                if (!filter.isDB2) { let rawVal = item[k]; let checkVal = String(rawVal); if (k === 'LTB') checkVal = formatDate(rawVal); else checkVal = simplifyValue(rawVal, k); if (!allowed.includes(checkVal)) return false; } 
-                else { let itemFeatures = []; if(item._DETAILS[k]) { itemFeatures = item._DETAILS[k].map(d => { let v = d.value; if (v && (v.toLowerCase() === 'a' || v.toLowerCase() === 'y' || v.toLowerCase() === 'yes')) return d.label; return simplifyValue(v, k); }); } let match = allowed.some(val => itemFeatures.includes(val)); if (!match) return false; }
+               let filter = ACTIVE_FILTERS[k]; let allowed = filter.vals; if(allowed.length === 0) return false; 
+               if (!filter.isDB2) { 
+                   let rawVal = item[k]; 
+                   let checkVal = (k === 'LTB') ? formatDate(rawVal) : simplifyForFilter(rawVal, k); // Use Simplified for comparison
+                   if (!allowed.includes(checkVal)) return false; 
+               } 
+               else { 
+                   let itemFeatures = []; 
+                   if(item._DETAILS[k]) { 
+                       itemFeatures = item._DETAILS[k].map(d => { 
+                           let v = d.value; 
+                           if (v && (v.toLowerCase() === 'a' || v.toLowerCase() === 'y' || v.toLowerCase() === 'yes')) return d.label; 
+                           return simplifyForFilter(v, k); 
+                       }); 
+                   } 
+                   let match = allowed.some(val => itemFeatures.includes(val)); 
+                   if (!match) return false; 
+               }
             }
             return true;
         });
         applySort(res);
     }
-
+ 
     function applySort(data) {
         const sortValue = document.getElementById('sort-order').value;
         data.sort((a, b) => {
             switch(sortValue) {
-                case 'status': const rank = (s) => { s=String(s).toUpperCase(); if(s==='NEW') return 1; if(s==='ES') return 2; if(s==='MP') return 3; if(s==='LTB') return 4; return 5; }; return rank(a.Status) - rank(b.Status);
-                case 'original': return (a._id || 0) - (b._id || 0);
-                case 'pn_asc': return a.PN.localeCompare(b.PN); case 'pn_desc': return b.PN.localeCompare(a.PN);
-                case 'ltb_desc': return (parseDate(b.LTB)||new Date(2099,0,1)) - (parseDate(a.LTB)||new Date(2099,0,1));
-                case 'ltb_asc': return (parseDate(a.LTB)||new Date(2099,0,1)) - (parseDate(b.LTB)||new Date(2099,0,1));
-                default: return 0;
+               case 'status': const rank = (s) => { s=String(s).toUpperCase(); if(s==='NEW') return 1; if(s==='ES') return 2; if(s==='MP') return 3; if(s==='LTB') return 4; return 5; }; return rank(a.Status) - rank(b.Status);
+               case 'original': return (a._id || 0) - (b._id || 0);
+               case 'pn_asc': return a.PN.localeCompare(b.PN); case 'pn_desc': return b.PN.localeCompare(a.PN);
+               case 'ltb_desc': return (parseDate(b.LTB)||new Date(2099,0,1)) - (parseDate(a.LTB)||new Date(2099,0,1));
+               case 'ltb_asc': return (parseDate(a.LTB)||new Date(2099,0,1)) - (parseDate(b.LTB)||new Date(2099,0,1));
+               default: return 0;
             }
         });
         renderTable(data);
     }
-
+ 
     function renderTable(data) {
         CURRENT_VISIBLE_DATA = data; const body = document.getElementById('table-body'); body.innerHTML = '';
-        if (!data || data.length === 0) { body.innerHTML = '<tr><td colspan="10" style="text-align:center; padding:70px; color:var(--text-muted); font-size:16px;">No results found.</td></tr>'; return; }
+        if (!data || data.length === 0) { body.innerHTML = '<tr><td colspan="12" style="text-align:center; padding:70px; color:var(--text-muted); font-size:16px;">No results found.</td></tr>'; return; }
+        
+        const fmt = (val) => (!val || val === '-' || val === '0') ? '<span class="empty-val">-</span>' : val;
+ 
         data.forEach(row => {
             try {
-                let tr = document.createElement('tr'); let safePN = String(row.PN || "N/A");
-                let link = "#"; if (row._DIRECT_LINK && row._DIRECT_LINK.length > 5) link = row._DIRECT_LINK; else if (safePN !== "N/A") link = `https://www.google.com/search?q=site:advantech.com+${safePN}&btnI=1`; 
-                let envStyle = getEnvColor(row.WorkEnv); let statusStyle = getStatusColor(row.Status); let displayEnv = simplifyValue(row.WorkEnv, 'WorkEnv'); let displayTouch = simplifyValue(row.Type, 'Type');
-                tr.innerHTML = `<td><span class="status-tag" style="${statusStyle}">${row.Status || '-'}</span></td><td class="pn-cell"><a href="${link}" target="_blank" style="color: inherit; text-decoration: none; display:block; width:100%;" title="Open Product Page">${safePN}</a></td><td>${formatDate(row.LTB)}</td><td style="${envStyle}">${displayEnv || '-'}</td><td>${row.size || '-'}</td><td>${row.Resolution || '-'}</td><td>${simplifyValue(row.CPU, 'CPU') || '-'}</td><td>${displayTouch || '-'}</td><td>${simplifyValue(row.Memory, 'Memory') || '-'}</td><td><button class="action-btn" onclick="openModal('${safePN}')">DETAILS</button></td>`;
-                body.appendChild(tr);
+               let tr = document.createElement('tr'); let safePN = String(row.PN || "N/A");
+               let link = "#"; if (row._DIRECT_LINK && row._DIRECT_LINK.length > 5) link = row._DIRECT_LINK; else if (safePN !== "N/A") link = `https://www.google.com/search?q=site:advantech.com+${safePN}&btnI=1`; 
+               
+               let statusStyle = getStatusColor(row.Status);
+               let envStyle = getSemanticStyle(row.WorkEnv, 'WorkEnv');
+               let vertStyle = getSemanticStyle(row.Vertical, 'Vertical');
+               let seriesStyle = getSemanticStyle(row.Series, 'Series');
+ 
+               tr.innerHTML = `
+                   <td><span class="status-tag" style="${statusStyle}">${row.Status || '-'}</span></td>
+                   <td class="pn-cell"><a href="${link}" target="_blank" style="color: inherit; text-decoration: none; display:block; width:100%;" title="Open Product Page">${safePN}</a></td>
+                   <td>${formatDate(row.LTB)}</td>
+                   <td><span class="semantic-tag" style="${envStyle}">${simplifyValue(row.WorkEnv, 'WorkEnv') || '-'}</span></td>
+                   <td><span class="semantic-tag" style="${vertStyle}">${fmt(row.Vertical)}</span></td>
+                   <td><span class="semantic-tag" style="${seriesStyle}">${fmt(row.Series)}</span></td>
+                   <td>${fmt(row.size)}</td>
+                   <td>${fmt(row.Resolution)}</td>
+                   <td>${fmt(simplifyValue(row.CPU, 'CPU'))}</td>
+                   <td>${fmt(simplifyValue(row.Type, 'Type'))}</td>
+                   <td>${fmt(simplifyValue(row.Memory, 'Memory'))}</td>
+                   <td><button class="action-btn" onclick="openModal('${safePN}')">DETAILS</button></td>
+               `;
+               body.appendChild(tr);
             } catch (err) { console.warn("Skipping bad row:", row, err); }
         });
     }
-
+ 
+    function findBestAlternative(currentItem) {
+        const pn = currentItem.PN;
+        if(!pn || pn.length < 5) return null;
+        let familyPrefix = pn.split('-')[0]; 
+        const candidates = GLOBAL_DATA.filter(cand => {
+            if(cand.PN === currentItem.PN) return false;
+            if(!cand.PN.startsWith(familyPrefix)) return false;
+            if(String(cand.size).trim() !== String(currentItem.size).trim()) return false;
+            const currentLTB = parseDate(currentItem.LTB);
+            const candLTB = parseDate(cand.LTB);
+            if(!currentLTB && candLTB && candLTB < new Date()) return false;
+            if(currentLTB) { if(candLTB && candLTB <= currentLTB) return false; }
+            return true;
+        });
+        let bestMatch = null; let maxScore = 0;
+        candidates.forEach(cand => {
+            let score = 0; score += 50;
+            if(cand.Resolution === currentItem.Resolution) score += 20; else return; 
+            const curTouch = simplifyValue(currentItem.Type, 'Type').toLowerCase();
+            const candTouch = simplifyValue(cand.Type, 'Type').toLowerCase();
+            if(curTouch === candTouch) { score += 15; } else if (curTouch.includes('resistive') && candTouch.includes('pcap')) { score += 10; } else { score -= 10; }
+            if(cand.CPU !== currentItem.CPU) score += 5; 
+            const curMem = parseInt(currentItem.Memory) || 0; const candMem = parseInt(cand.Memory) || 0;
+            if(candMem >= curMem) score += 5;
+            if(cand.PN.substring(0, 7) === currentItem.PN.substring(0, 7)) score += 5;
+            if(score > maxScore) { maxScore = score; bestMatch = cand; }
+        });
+        if(maxScore >= 75) { return { item: bestMatch, score: maxScore }; }
+        return null;
+    }
+    
+    // --- INTERNAL SEARCH TRIGGER ---
+    function triggerInternalSearch(pn) {
+        closeModal();
+        const searchInput = document.getElementById('pn-search');
+        searchInput.value = pn;
+        saveToHistory(pn);
+        resetFilterStateOnly(); 
+        applyFilters(true);
+        document.getElementById('main-table-container').scrollLeft = 0;
+        window.scrollTo({ top: 100, behavior: 'smooth' });
+    }
+ 
     function openModal(pn) {
         let item = GLOBAL_DATA.find(i => i.PN === pn);
         if(!item) return;
         document.getElementById('modal-overlay').style.display = 'flex';
-
-        // 1. CALCULATE LINK FOR P/N
+ 
         let productLink = "#";
-        if (item._DIRECT_LINK && item._DIRECT_LINK.length > 5) {
-            productLink = item._DIRECT_LINK;
-        } else if (pn !== "N/A") {
-            productLink = `https://www.google.com/search?q=site:advantech.com+${pn}&btnI=1`;
-        }
-
+        if (item._DIRECT_LINK && item._DIRECT_LINK.length > 5) { productLink = item._DIRECT_LINK; } 
+        else if (pn !== "N/A") { productLink = `https://www.google.com/search?q=site:advantech.com+${pn}&btnI=1`; }
+ 
         const createLinkBtn = (url, label, icon, cssClass) => {
             if (!url || typeof url !== 'string' || url.length < 5 || url.toLowerCase().includes('n/a')) return "";
-            let cleanUrl = url.trim();
-            return `<a href="${cleanUrl}" target="_blank" rel="noopener noreferrer" class="${cssClass}">
+            return `<a href="${url.trim()}" target="_blank" rel="noopener noreferrer" class="${cssClass}">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${icon}</svg>
                 <span>${label}</span>
             </a>`;
         };
-
+ 
         const iconDS = `<path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path><polyline points="7 11 12 16 17 11"></polyline><line x1="12" y1="4" x2="12" y2="16"></line>`;
         let btnsHtml = createLinkBtn(item.ManualLink, "DATASHEET", iconDS, "btn-impact");
         let headerActionsHtml = btnsHtml ? `<div class="header-btn-group">${btnsHtml}</div>` : '';
-
+ 
         let hasImage = (item.ImageURL && typeof item.ImageURL === 'string' && item.ImageURL.length > 10 && !item.ImageURL.toLowerCase().includes('undefined'));
         let layoutClass = hasImage ? 'modal-layout-split' : 'modal-layout-full';
+        
+        let commentHtml = '';
+        if(item.Comment && item.Comment !== '-' && !EXCLUSIONS.includes(item.Comment.toLowerCase())) {
+             commentHtml = `<div class="modal-comment-box"><span class="modal-comment-title">Note</span>${item.Comment}</div>`;
+        }
+ 
         let imgColHtml = '';
-
         if (hasImage) {
             imgColHtml = `
-            <div class="modal-preview-card" onclick="openLightbox('${item.ImageURL}')">
-                <img src="${item.ImageURL}" class="modal-product-img" alt="${item.PN}" onerror="this.style.display='none'; this.parentElement.style.display='none';">
-                <div class="zoom-hint">🔍 Click to Expand</div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div class="modal-preview-card" onclick="openLightbox('${item.ImageURL}')">
+                    <img src="${item.ImageURL}" class="modal-product-img" alt="${item.PN}" onerror="this.style.display='none'; this.parentElement.style.display='none';">
+                    <div class="zoom-hint">🔍 Click to Expand</div>
+                </div>
+                ${commentHtml}
             </div>`;
+        } else {
+             if(commentHtml) imgColHtml = commentHtml;
         }
-
+ 
         let detailsHtml = "";
-        
-        // --- CLEAN & ELEGANT TAG RENDERING ---
         for (let cat in item._DETAILS) {
             if(cat.toUpperCase().includes('P/N') || cat.startsWith('__')) continue; 
             if(item._DETAILS[cat].length > 0) {
-                
-                detailsHtml += `<div class="detail-section-title">${cat}</div>
-                <div class="detail-grid">`;
-                
+                detailsHtml += `<div class="detail-section-title">${cat}</div><div class="detail-grid">`;
                 item._DETAILS[cat].forEach(feat => {
                     let val = String(feat.value).trim(); 
-                    let displayVal = "";
                     let isBoolean = (val.length < 5 && (val.toLowerCase() === 'a' || val.toLowerCase() === 'y' || val.toLowerCase() === 'yes'));
-
-                    if (isBoolean) { 
-                        // JUST THE TITLE/LABEL - CLEAN BOX
-                        displayVal = `<div class="detail-simple-tag">${feat.label}</div>`; 
-                    } 
-                    else { 
-                        // LABEL + VALUE BOX
-                        displayVal = `
-                        <div class="detail-card-value">
-                            <div class="detail-label-small">${feat.label}</div>
-                            <div class="detail-value-text">${feat.value}</div>
-                        </div>`; 
-                    }
-                    
-                    detailsHtml += displayVal;
+                    if (isBoolean) { detailsHtml += `<div class="detail-simple-tag">${feat.label}</div>`; } 
+                    else { detailsHtml += `<div class="detail-card-value"><div class="detail-label-small">${feat.label}</div><div class="detail-value-text">${feat.value}</div></div>`; }
                 });
                 detailsHtml += `</div>`;
             }
+        }
+ 
+        const alternative = findBestAlternative(item);
+        let alternativeHtml = "";
+ 
+        if(alternative) {
+            const altItem = alternative.item;
+            const score = alternative.score;
+            let curLTBText = item.LTB ? `LTB: ${formatDate(item.LTB)}` : "Active / MP";
+            let altLTBText = altItem.LTB ? `LTB: ${formatDate(altItem.LTB)}` : "Active / MP";
+            let altLTBClass = (!altItem.LTB || parseDate(altItem.LTB) > new Date()) ? "good" : "";
+ 
+            alternativeHtml = `
+            <div class="comp-section">
+                <div class="comp-header">
+                    <span>SUGGESTED UPGRADE</span>
+                    <span style="background:rgba(255,255,255,0.25); color:#fff; padding:2px 8px; border-radius:4px; font-size:10px;">RECOMMENDED</span>
+                </div>
+                <div class="comp-body">
+                    <div class="comp-bar-container">
+                        <div class="comp-score-label"><span>Compatibility Score</span><span>${score}%</span></div>
+                        <div class="comp-progress-bg"><div class="comp-progress-fill" style="width: ${score}%"></div></div>
+                    </div>
+                    <div class="comp-grid">
+                        <div class="comp-col">
+                            <span class="comp-label">CURRENT SELECTION</span>
+                            <span class="comp-pn" style="opacity:0.6;">${item.PN}</span>
+                            <span class="comp-specs">${simplifyValue(item.CPU, 'CPU')}<br>${item.Memory ? simplifyValue(item.Memory, 'Memory') : 'N/A'}<br><div class="comp-ltb">${curLTBText}</div></span>
+                        </div>
+                        <div class="comp-divider"></div>
+                        <div class="comp-col">
+                            <span class="comp-label" style="color:#38BDF8;">NEW MODEL</span>
+                            <div class="comp-pn internal-link-action" onclick="triggerInternalSearch('${altItem.PN}')" title="Filter list for this item">${altItem.PN}</div>
+                            <span class="comp-specs"><span class="comp-highlight">${simplifyValue(altItem.CPU, 'CPU')}</span><br><span class="comp-highlight">${altItem.Memory ? simplifyValue(altItem.Memory, 'Memory') : 'N/A'}</span><br><div class="comp-ltb ${altLTBClass}">${altLTBText}</div></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
         }
         
         document.getElementById('modal-content').innerHTML = `
@@ -1283,16 +1488,17 @@
             </div>
             ${headerActionsHtml}
         </div>
-
+ 
         <div class="modal-container-grid ${layoutClass}">
             ${imgColHtml} 
             <div style="display:grid; grid-template-columns: 1fr; gap:0px; align-content:start;">
-                 ${detailsHtml || '<div style="padding:30px; color:#64748B; font-size:18px; text-align:center;">No additional technical details found.</div>'}
+               ${detailsHtml || '<div style="padding:30px; color:#64748B; font-size:18px; text-align:center;">No additional technical details found.</div>'}
+               ${alternativeHtml}
             </div>
         </div>
         `;
     }
-
+ 
     function closeModal(e) { if(!e || e.target.id==='modal-overlay' || e.target.className.includes('close')) document.getElementById('modal-overlay').style.display='none'; }
     function toggleHelp() { let h=document.getElementById('help-banner'); h.style.display=h.style.display==='block'?'none':'block'; }
     function toggleTheme() { const html = document.documentElement; const current = html.getAttribute('data-theme'); const next = current === 'dark' ? 'light' : 'dark'; html.setAttribute('data-theme', next); localStorage.setItem('theme', next); updateThemeIcon(next); }
@@ -1302,39 +1508,32 @@
         if(s === 'MP') return 'color: #10B981; background: rgba(16, 185, 129, 0.1);'; if(s === 'LTB') return 'color: #F59E0B; background: rgba(245, 158, 11, 0.1);';
         if(s === 'NEW') return 'color: #38BDF8; background: rgba(56, 189, 248, 0.1);'; if(s === 'ES') return 'color: #00C2FF; background: rgba(0, 194, 255, 0.1);'; if(s === 'EOL') return 'color: #EF4444; background: rgba(239, 68, 68, 0.15); border: 1px solid #EF4444;'; return 'color: #EF4444; background: rgba(239, 68, 68, 0.1);'; 
     }
-    function getEnvColor(text) {
-        if(!text || text === '-') return 'color: var(--text-muted);'; const t = text.toLowerCase();
-        if(t.includes('harsher') || t.includes('enhanced')) return 'color: #A855F7; font-weight:700; text-shadow: 0 0 5px rgba(168, 85, 247, 0.3);'; if(t.includes('explosion') || t.includes('robust')) return 'color: #FF4D4F; font-weight:700;'; if(t.includes('embedded') || t.includes('modular') || t.includes('scalable') || t.includes('integrated')) return 'color: #FDBA74; font-weight:700;'; if(t.includes('risc') || t.includes('basic') || t.includes('browser') || t.includes('thin client') || t.includes('monitor')) return 'color: #4ADE80; font-weight:600;'; return 'color: var(--accent);'; 
-    }
     function copyToClipboard(text) { navigator.clipboard.writeText(text).then(() => { let toast = document.getElementById("toast"); toast.className = "show"; setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000); }); }
     function showError(msg) { document.getElementById('loading').style.display = 'none'; const box = document.getElementById('error-box'); box.style.display = 'block'; box.innerHTML = `<strong>ERROR:</strong> ${msg}`; }
     function toggleExportMenu() { const menu = document.getElementById('export-menu'); const isShown = menu.classList.contains('show'); document.querySelectorAll('.multiselect-content').forEach(e => e.classList.remove('show')); if (isShown) menu.classList.remove('show'); else menu.classList.add('show'); }
     document.addEventListener('click', function(e) { if (!e.target.closest('.export-wrapper')) { const menu = document.getElementById('export-menu'); if(menu) menu.classList.remove('show'); } });
+    
     function exportData(type) {
         if (!CURRENT_VISIBLE_DATA || CURRENT_VISIBLE_DATA.length === 0) { alert("No data to export!"); return; }
         try {
             const dateStr = new Date().toISOString().split('T')[0]; const fileName = `Advantech_List_${dateStr}`;
             if (type === 'pdf') {
-                if (!window.jspdf || !window.jspdf.jsPDF) { alert("PDF Library missing!"); return; }
-                const { jsPDF } = window.jspdf; const doc = new jsPDF({ orientation: 'landscape' });
-                const logoImg = document.querySelector('.advantech-logo'); let logoData = null; if(logoImg && logoImg.complete && logoImg.naturalWidth > 0) { try { const canvas = document.createElement("canvas"); canvas.width = logoImg.naturalWidth; canvas.height = logoImg.naturalHeight; const ctx = canvas.getContext("2d"); ctx.drawImage(logoImg, 0, 0); logoData = canvas.toDataURL("image/png"); } catch(e) {} }
-                const headerY = 15; if (logoData) doc.addImage(logoData, 'PNG', 14, 8, 35, 10); doc.setFontSize(16); doc.setTextColor(0, 86, 210); doc.text(`Product List Export`, 14, headerY + 15); doc.setFontSize(10); doc.setTextColor(100); doc.text(`Generated: ${dateStr}`, 14, headerY + 22);
-                const tableColumn = ["Status", "P/N", "LTB", "Env", "Size", "Res", "CPU", "Touch", "Mem"]; const tableRows = CURRENT_VISIBLE_DATA.map(row => [ row.Status, row.PN, formatDate(row.LTB), row.WorkEnv, row.size, row.Resolution, row.CPU, row.Type, row.Memory ]);
-                doc.autoTable({ head: [tableColumn], body: tableRows, startY: headerY + 28, theme: 'grid', styles: { fontSize: 8, cellPadding: 2, valign: 'middle' }, headStyles: { fillColor: [0, 112, 224], textColor: 255, fontStyle: 'bold' }, alternateRowStyles: { fillColor: [241, 245, 249] }, margin: { top: 20 } }); doc.save(`${fileName}.pdf`);
+               if (!window.jspdf || !window.jspdf.jsPDF) { alert("PDF Library missing!"); return; }
+               const { jsPDF } = window.jspdf; const doc = new jsPDF({ orientation: 'landscape' });
+               const logoImg = document.querySelector('.advantech-logo'); let logoData = null; if(logoImg && logoImg.complete && logoImg.naturalWidth > 0) { try { const canvas = document.createElement("canvas"); canvas.width = logoImg.naturalWidth; canvas.height = logoImg.naturalHeight; const ctx = canvas.getContext("2d"); ctx.drawImage(logoImg, 0, 0); logoData = canvas.toDataURL("image/png"); } catch(e) {} }
+               const headerY = 15; if (logoData) doc.addImage(logoData, 'PNG', 14, 8, 35, 10); doc.setFontSize(16); doc.setTextColor(0, 86, 210); doc.text(`Product List Export`, 14, headerY + 15); doc.setFontSize(10); doc.setTextColor(100); doc.text(`Generated: ${dateStr}`, 14, headerY + 22);
+               const tableColumn = ["Status", "P/N", "LTB", "Env", "Size", "Res", "CPU", "Touch", "Mem"]; const tableRows = CURRENT_VISIBLE_DATA.map(row => [ row.Status, row.PN, formatDate(row.LTB), row.WorkEnv, row.size, row.Resolution, row.CPU, row.Type, row.Memory ]);
+               doc.autoTable({ head: [tableColumn], body: tableRows, startY: headerY + 28, theme: 'grid', styles: { fontSize: 8, cellPadding: 2, valign: 'middle' }, headStyles: { fillColor: [0, 112, 224], textColor: 255, fontStyle: 'bold' }, alternateRowStyles: { fillColor: [241, 245, 249] }, margin: { top: 20 } }); doc.save(`${fileName}.pdf`);
             } else {
-                const cleanData = CURRENT_VISIBLE_DATA.map(row => { let detailStr = ""; if (row._DETAILS) { detailStr = Object.entries(row._DETAILS).map(([k, v]) => { let vals = v.map(x => { let s = String(x.value).trim(); if (s.length < 3 && s.toUpperCase().includes('A')) return x.label; return x.value; }).join(', '); return `${k.toUpperCase()}: ${vals}`; }).join(' | \n'); } return { "Status": row.Status, "P/N": row.PN, "LTB Date": row.LTB instanceof Date ? row.LTB.toLocaleDateString() : row.LTB, "Work Environment": row.WorkEnv, "Size": row.size, "Resolution": row.Resolution, "CPU": row.CPU, "Touch Type": row.Type, "Memory": row.Memory, "Features Summary": detailStr }; });
-                const ws = XLSX.utils.json_to_sheet(cleanData); if (type === 'csv') { const csvOutput = XLSX.utils.sheet_to_csv(ws); const blob = new Blob(["\ufeff" + csvOutput], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = `${fileName}.csv`; document.body.appendChild(a); a.click(); document.body.removeChild(a); } else { const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "ProductList"); XLSX.writeFile(wb, `${fileName}.xlsx`); }
+               const cleanData = CURRENT_VISIBLE_DATA.map(row => { let detailStr = ""; if (row._DETAILS) { detailStr = Object.entries(row._DETAILS).map(([k, v]) => { let vals = v.map(x => { let s = String(x.value).trim(); if (s.length < 3 && s.toUpperCase().includes('A')) return x.label; return x.value; }).join(', '); return `${k.toUpperCase()}: ${vals}`; }).join(' | \n'); } return { "Status": row.Status, "P/N": row.PN, "LTB Date": row.LTB instanceof Date ? row.LTB.toLocaleDateString() : row.LTB, "Work Environment": row.WorkEnv, "Size": row.size, "Resolution": row.Resolution, "CPU": row.CPU, "Touch Type": row.Type, "Memory": row.Memory, "Vertical": row.Vertical, "Series": row.Series, "Comment": row.Comment, "Features Summary": detailStr }; });
+               const ws = XLSX.utils.json_to_sheet(cleanData); if (type === 'csv') { const csvOutput = XLSX.utils.sheet_to_csv(ws); const blob = new Blob(["\ufeff" + csvOutput], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = `${fileName}.csv`; document.body.appendChild(a); a.click(); document.body.removeChild(a); } else { const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "ProductList"); XLSX.writeFile(wb, `${fileName}.xlsx`); }
             }
         } catch (err) { console.error("Export Error:", err); alert("Export Error: " + err.message); } const menu = document.getElementById('export-menu'); if (menu) menu.classList.remove('show');
     }
-    let GEMINI_KEY = null; function toggleAI() { const win = document.getElementById('ai-window'); win.classList.toggle('open'); if(GEMINI_KEY && GEMINI_KEY !== "null") { document.getElementById('ai-key-screen').style.display = 'none'; document.getElementById('ai-chat-interface').style.display = 'flex'; } if(win.classList.contains('open') && GEMINI_KEY) document.getElementById('ai-user-input').focus(); } function activateAI() { const key = document.getElementById('api-key-input').value.trim(); if(!key) return alert("Please enter a key."); GEMINI_KEY = key; document.getElementById('ai-key-screen').style.display = 'none'; document.getElementById('ai-chat-interface').style.display = 'flex'; } async function sendAIMessage() { const input = document.getElementById('ai-user-input'); const text = input.value.trim(); if(!text) return; addMessage(text, 'user'); input.value = ''; const contextData = CURRENT_VISIBLE_DATA.slice(0, 30).map(item => ({ PN: item.PN, Status: item.Status, CPU: item.CPU, RAM: item.Memory, LCD: item.size, Touch: item.Type, LTB: formatDate(item.LTB) })); const prompt = `Expert Advantech Assistant. Context: ${JSON.stringify(contextData)}. User: "${text}". Answer strictly from data. Concise.`; const loadingId = addMessage("Thinking...", 'bot'); const models = ['gemini-1.5-flash', 'gemini-pro', 'gemini-1.0-pro']; let success = false; for (const model of models) { try { const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_KEY}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) }); if (response.ok) { const data = await response.json(); const loadingEl = document.querySelector(`[data-id="${loadingId}"]`); if(loadingEl) loadingEl.remove(); const answer = data.candidates[0].content.parts[0].text; addMessage(answer, 'bot', true); success = true; break; } } catch(e) { continue; } } if (!success) { const loadingEl = document.querySelector(`[data-id="${loadingId}"]`); if(loadingEl) loadingEl.remove(); addMessage("Error: Connection failed.", 'bot'); } } function addMessage(text, sender, isMarkdown = false) { const container = document.getElementById('ai-messages'); const div = document.createElement('div'); div.className = `ai-msg ${sender}`; if(isMarkdown && window.marked) div.innerHTML = marked.parse(text); else div.innerText = text; const id = Date.now(); div.setAttribute('data-id', id); container.appendChild(div); container.scrollTop = container.scrollHeight; return id; }
-  
-    // --- [ADDED] PWA REGISTRATION SCRIPT ---
+    
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('Service Worker Registered! Scope:', reg.scope))
-                .catch(err => console.log('Service Worker Error:', err));
+            navigator.serviceWorker.register('./sw.js').then(reg => console.log('Service Worker Registered!')).catch(err => console.log('Service Worker Error:', err));
         });
     }
   </script>
